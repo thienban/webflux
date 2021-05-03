@@ -1,6 +1,7 @@
 package com.example.demo;
 
 import com.example.demo.entity.Profile;
+import com.example.demo.entity.Role;
 import com.example.demo.repository.ProfileRepository;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
@@ -29,7 +30,7 @@ class SampleDataInitializer
                 .thenMany(
                         Flux
                                 .just("A", "B", "C", "D")
-                                .map(name -> new Profile(UUID.randomUUID().toString(), name + "@email.com"))
+                                .map(name -> new Profile(UUID.randomUUID().toString(), Role.ADMIN, name + "@email.com"))
                                 .flatMap(repository::save)
                 )
                 .thenMany(repository.findAll())

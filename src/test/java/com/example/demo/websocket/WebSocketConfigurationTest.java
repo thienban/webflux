@@ -1,6 +1,7 @@
 package com.example.demo.websocket;
 
 import com.example.demo.entity.Profile;
+import com.example.demo.entity.Role;
 import lombok.extern.log4j.Log4j2;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -31,7 +32,7 @@ class WebSocketConfigurationTest {
 
 
     private Profile generateRandomProfile() {
-        return new Profile(UUID.randomUUID().toString(), UUID.randomUUID().toString() + "@email.com");
+        return new Profile(UUID.randomUUID().toString(), Role.ADMIN, UUID.randomUUID().toString() + "@email.com");
     }
 
     @Test
@@ -78,7 +79,7 @@ class WebSocketConfigurationTest {
                 this.webClient
                         .post()
                         .uri("http://localhost:8080/profiles")
-                        .body(BodyInserters.fromObject(p))
+                        .body(BodyInserters.fromValue(p))
                         .retrieve()
                         .bodyToMono(String.class)
                         .thenReturn(p);

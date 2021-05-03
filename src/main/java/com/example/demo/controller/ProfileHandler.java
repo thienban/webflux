@@ -37,14 +37,14 @@ public class ProfileHandler {
 
     public Mono<ServerResponse> updateById(ServerRequest r) {
         Flux<Profile> id = r.bodyToFlux(Profile.class)
-                .flatMap(p -> this.profileService.update(id(r), p.getEmail()));
+                .flatMap(p -> this.profileService.update(id(r), p.getRole(), p.getEmail()));
         return defaultReadResponse(id);
     }
 
     public Mono<ServerResponse> create(ServerRequest request) {
         Flux<Profile> flux = request
                 .bodyToFlux(Profile.class)
-                .flatMap(toWrite -> this.profileService.create(toWrite.getEmail()));
+                .flatMap(toWrite -> this.profileService.create(toWrite.getRole(), toWrite.getEmail()));
         return defaultWriteResponse(flux);
     }
 

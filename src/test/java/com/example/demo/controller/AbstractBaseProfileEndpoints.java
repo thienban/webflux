@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.entity.Profile;
+import com.example.demo.entity.Role;
 import com.example.demo.repository.ProfileRepository;
 import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Test;
@@ -35,7 +36,7 @@ abstract class AbstractBaseProfileEndpoints {
 
         Mockito
                 .when(this.repository.findAll())
-                .thenReturn(Flux.just(new Profile("1", "A"), new Profile("2", "B")));
+                .thenReturn(Flux.just(new Profile("1", Role.ADMIN, "A"), new Profile("2", Role.CUSTOMER, "B")));
 
 
         this.client
@@ -54,7 +55,7 @@ abstract class AbstractBaseProfileEndpoints {
 
     @Test
     void save() {
-        Profile data = new Profile("123", UUID.randomUUID().toString() + "@email.com");
+        Profile data = new Profile("123", Role.ADMIN, UUID.randomUUID().toString() + "@email.com");
         Mockito
                 .when(this.repository.save(Mockito.any(Profile.class)))
                 .thenReturn(Mono.just(data));
@@ -72,7 +73,7 @@ abstract class AbstractBaseProfileEndpoints {
 
     @Test
     void delete() {
-        Profile data = new Profile("123", UUID.randomUUID().toString() + "@email.com");
+        Profile data = new Profile("123", Role.ADMIN, UUID.randomUUID().toString() + "@email.com");
         Mockito
                 .when(this.repository.findById(data.getId()))
                 .thenReturn(Mono.just(data));
@@ -89,7 +90,7 @@ abstract class AbstractBaseProfileEndpoints {
 
     @Test
     void update() {
-        Profile data = new Profile("123", UUID.randomUUID().toString() + "@email.com");
+        Profile data = new Profile("123", Role.ADMIN, UUID.randomUUID().toString() + "@email.com");
 
         Mockito
                 .when(this.repository.findById(data.getId()))
@@ -112,7 +113,7 @@ abstract class AbstractBaseProfileEndpoints {
     @Test
     void getById() {
 
-        Profile data = new Profile("1", "A");
+        Profile data = new Profile("1", Role.ADMIN, "A");
 
         Mockito
                 .when(this.repository.findById(data.getId()))

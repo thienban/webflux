@@ -22,7 +22,6 @@ public class ProfileRestController {
         this.profileRepository = profileRepository;
     }
 
-
     @GetMapping
     Publisher<Profile> getAll() {
         return this.profileRepository.all();
@@ -38,8 +37,8 @@ public class ProfileRestController {
     @PostMapping
     Publisher<ResponseEntity<Profile>> create(@RequestBody Profile profile) {
         return this.profileRepository
-                .create(profile.getEmail())
-                .map(p -> ResponseEntity.created(URI.create("/profiles/" + p.getId()))
+                .create(profile.getRole(), profile.getEmail())
+                .map(p -> ResponseEntity.created(URI.create("/requests/" + p.getId()))
                         .contentType(mediaType)
                         .build());
     }
@@ -53,7 +52,7 @@ public class ProfileRestController {
     Publisher<ResponseEntity<Profile>> updateById(@PathVariable String id, @RequestBody Profile profile) {
         return Mono
                 .just(profile)
-                .flatMap(p -> this.profileRepository.update(id, p.getEmail()))
+                .flatMap(p -> this.profileRepository.update(id, p.getRole(), p.getEmail()))
                 .map(p -> ResponseEntity
                         .ok()
                         .contentType(this.mediaType)

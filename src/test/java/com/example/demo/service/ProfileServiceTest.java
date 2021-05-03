@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import com.example.demo.entity.Profile;
+import com.example.demo.entity.Role;
 import com.example.demo.repository.ProfileRepository;
 import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Test;
@@ -31,7 +32,7 @@ class ProfileServiceTest {
 
     @Test
     void getAll() {
-        Flux<Profile> saved = repository.saveAll(Flux.just(new Profile(null, "Josh"), new Profile(null, "Matt"), new Profile(null, "Jane")));
+        Flux<Profile> saved = repository.saveAll(Flux.just(new Profile(null, Role.ADMIN, "Josh"), new Profile(null, Role.CUSTOMER, "Matt"), new Profile(null, Role.DRIVER, "Jane")));
 
         Flux<Profile> composite = service.all().thenMany(saved);
 
@@ -47,7 +48,7 @@ class ProfileServiceTest {
 
     @Test
     void save() {
-        Mono<Profile> profileMono = this.service.create("email@email.com");
+        Mono<Profile> profileMono = this.service.create(Role.ADMIN, "email@email.com");
         StepVerifier
                 .create(profileMono)
                 .expectNextMatches(saved -> StringUtils.hasText(saved.getId()))
@@ -58,7 +59,7 @@ class ProfileServiceTest {
     void delete() {
         String test = "test";
         Mono<Profile> deleted = this.service
-                .create(test)
+                .create(Role.CUSTOMER, test)
                 .flatMap(saved -> this.service.delete(saved.getId()));
         StepVerifier
                 .create(deleted)
@@ -69,8 +70,8 @@ class ProfileServiceTest {
     @Test
     void update() throws Exception {
         Mono<Profile> saved = this.service
-                .create("test")
-                .flatMap(p -> this.service.update(p.getId(), "test1"));
+                .create(Role.ADMIN, "test")
+                .flatMap(p -> this.service.update(p.getId(), Role.DRIVER, "test1"));
         StepVerifier
                 .create(saved)
                 .expectNextMatches(p -> p.getEmail().equalsIgnoreCase("test1"))
@@ -81,7 +82,7 @@ class ProfileServiceTest {
     void getById() {
         String test = UUID.randomUUID().toString();
         Mono<Profile> deleted = this.service
-                .create(test)
+                .create(Role.ADMIN, test)
                 .flatMap(saved -> this.service.get(saved.getId()));
         StepVerifier
                 .create(deleted)

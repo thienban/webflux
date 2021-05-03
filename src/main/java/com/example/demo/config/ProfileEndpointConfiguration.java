@@ -21,7 +21,8 @@ public class ProfileEndpointConfiguration {
                 .andRoute(i(GET("/profiles/{id}")), handler::getById)
                 .andRoute(i(DELETE("/profiles/{id}")), handler::deleteById)
                 .andRoute(i(POST("/profiles")), handler::create)
-                .andRoute(i(PUT("/profiles/{id}")), handler::updateById);
+                .andRoute(i(PUT("/profiles/{id}")), handler::updateById)
+                .andRoute(i(POST("/request/{id}")), handler::create);
     }
 
 
